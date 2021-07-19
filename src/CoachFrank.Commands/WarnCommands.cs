@@ -23,6 +23,7 @@ namespace CoachFrank.Commands
         }
 
         [GroupCommand]
+        [RequireModeratorRole]
         public async Task Warn(CommandContext ctx, DiscordUser user, [RemainingText] string reason = "")
         {
             var warning = new Warning
