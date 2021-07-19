@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoachFrank.Commands.Attributes;
 using CoachFrank.Data;
 using CoachFrank.Data.Models;
 using DSharpPlus.CommandsNext;
@@ -40,7 +41,7 @@ namespace CoachFrank.Commands
         }
 
         [Command("remove")]
-        [RequireRoles(RoleCheckMode.Any, "Admin")]
+        [RequireAdminRole]
         public async Task WarnRemove(CommandContext ctx, int warnId)
         {
             var warning = _context.Warnings.SingleOrDefault(x => x.Id == warnId);
@@ -53,7 +54,7 @@ namespace CoachFrank.Commands
         }
 
         [Command("list")]
-        [RequireRoles(RoleCheckMode.Any, "Admin", "Moderator")]
+        [RequireAdminRole, RequireModeratorRole]
         public async Task WarnList(CommandContext ctx, DiscordUser user)
         {
             var warnings = await _context.Warnings.Where(x => x.DiscordId == user.Id && !x.Removed).ToListAsync();
