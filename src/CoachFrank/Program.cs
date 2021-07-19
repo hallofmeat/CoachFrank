@@ -76,7 +76,7 @@ namespace CoachFrank
             scope.ServiceProvider.GetRequiredService<BotContext>().Database.Migrate();
         }
 
-        //For migrations
+        //For creating migrations
         public class BotContextFactory : IDesignTimeDbContextFactory<BotContext>
         {
             public BotContext CreateDbContext(string[] args)
