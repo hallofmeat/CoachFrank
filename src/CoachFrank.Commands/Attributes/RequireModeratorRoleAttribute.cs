@@ -6,6 +6,9 @@ using DSharpPlus.CommandsNext.Attributes;
 
 namespace CoachFrank.Commands.Attributes
 {
+    /// <summary>
+    /// Allows moderator and above to run
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public sealed class RequireModeratorRoleAttribute : CheckBaseAttribute
     {
@@ -14,7 +17,7 @@ namespace CoachFrank.Commands.Attributes
             if (ctx.Guild == null || ctx.Member == null)
                 return Task.FromResult(false);
 
-            var result = ctx.Member.Roles.Any(x => x.Name == "Moderator");
+            var result = ctx.Member.Roles.Any(x => x.Name == "Moderator" || x.Name == "Admin");
             return Task.FromResult(result);
         }
     }

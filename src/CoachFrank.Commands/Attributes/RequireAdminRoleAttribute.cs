@@ -6,6 +6,9 @@ using DSharpPlus.CommandsNext.Attributes;
 
 namespace CoachFrank.Commands.Attributes
 {
+    /// <summary>
+    /// Allows admin
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public sealed class RequireAdminRoleAttribute : CheckBaseAttribute
     {

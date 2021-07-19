@@ -54,7 +54,7 @@ namespace CoachFrank.Commands
         }
 
         [Command("list")]
-        [RequireAdminRole, RequireModeratorRole]
+        [RequireModeratorRole]
         public async Task WarnList(CommandContext ctx, DiscordUser user)
         {
             var warnings = await _context.Warnings.Where(x => x.DiscordId == user.Id && !x.Removed).ToListAsync();
