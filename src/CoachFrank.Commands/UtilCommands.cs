@@ -15,6 +15,7 @@ namespace CoachFrank.Commands
         }
 
         [Command("status")]
+        [Aliases("uptime")]
         public Task Status(CommandContext ctx)
         {
             var current = System.Diagnostics.Process.GetCurrentProcess();
