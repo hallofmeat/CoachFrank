@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.1" />
+    <PackageReference Include="Humanizer.Core" Version="2.11.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CoachFrank.Data\CoachFrank.Data.csproj" />
+  </ItemGroup>
+
+</Project>
