@@ -16,7 +16,7 @@ namespace CoachFrank.Commands
         [Command("ping")]
         public Task Ping(CommandContext ctx)
         {
-            return ctx.RespondAsync(":ping_pong:");
+            return ctx.RespondAsync(EmojiConstants.PingPong);
         }
 
         [Command("uptime")]
@@ -36,31 +36,31 @@ namespace CoachFrank.Commands
             try
             {
                 var statusUpdate = await skateboard3Client.GetStatus();
-                statusUpdateResult.AppendLine($"{EmojiConstants.CheckMark} Skateboard3Server is Up for {(DateTime.Now - statusUpdate.StartTime).Humanize(2)}");
+                statusUpdateResult.AppendLine($"{EmojiConstants.GreenCircle} Skateboard3Server is Up for {(DateTime.Now - statusUpdate.StartTime).Humanize(2)}");
             }
             catch (Exception)
             {
-                statusUpdateResult.AppendLine($"{EmojiConstants.X} Skateboard3Server is Down");
+                statusUpdateResult.AppendLine($"{EmojiConstants.RedCircle} Skateboard3Server is Down");
             }
             var qos1Client = RestClient.For<IServerStatus>("http://sb3-qs1.hallofmeat.net:17502");
             try
             {
                 var statusUpdate = await qos1Client.GetStatus();
-                statusUpdateResult.AppendLine($"{EmojiConstants.CheckMark} Skateboard3Server QS1 is Up for {(DateTime.Now - statusUpdate.StartTime).Humanize(2)}");
+                statusUpdateResult.AppendLine($"{EmojiConstants.GreenCircle} Skateboard3Server QS1 is Up for {(DateTime.Now - statusUpdate.StartTime).Humanize(2)}");
             }
             catch (Exception)
             {
-                statusUpdateResult.AppendLine($"{EmojiConstants.X} Skateboard3Server QS1 is Down");
+                statusUpdateResult.AppendLine($"{EmojiConstants.RedCircle} Skateboard3Server QS1 is Down");
             }
             var qos2Client = RestClient.For<IServerStatus>("http://sb3-qs2.hallofmeat.net:17502");
             try
             {
                 var statusUpdate = await qos2Client.GetStatus();
-                statusUpdateResult.AppendLine($"{EmojiConstants.CheckMark} Skateboard3Server QS2 is Up for {(DateTime.Now - statusUpdate.StartTime).Humanize(2)}");
+                statusUpdateResult.AppendLine($"{EmojiConstants.GreenCircle} Skateboard3Server QS2 is Up for {(DateTime.Now - statusUpdate.StartTime).Humanize(2)}");
             }
             catch (Exception)
             {
-                statusUpdateResult.AppendLine($"{EmojiConstants.X} Skateboard3Server QS2 is Down");
+                statusUpdateResult.AppendLine($"{EmojiConstants.RedCircle} Skateboard3Server QS2 is Down");
             }
 
             await ctx.RespondAsync(statusUpdateResult.ToString());
