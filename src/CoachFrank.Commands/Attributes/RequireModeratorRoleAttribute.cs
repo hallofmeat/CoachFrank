@@ -10,7 +10,7 @@ namespace CoachFrank.Commands.Attributes
     /// Allows moderator and above to run
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public sealed class RequireModeratorRoleAttribute : CheckBaseAttribute
+    public class RequireModeratorRoleAttribute : CheckBaseAttribute
     {
         public override Task<bool> ExecuteCheckAsync(CommandContext ctx, bool help)
         {

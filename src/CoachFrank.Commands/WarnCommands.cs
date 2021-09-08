@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoachFrank.Commands
 {
     [Group("warn")]
+    [RequireModeratorRole]
     public class WarnCommands : BaseCommandModule
     {
         private readonly BotContext _context;
@@ -23,7 +24,6 @@ namespace CoachFrank.Commands
         }
 
         [GroupCommand]
-        [RequireModeratorRole]
         public async Task Warn(CommandContext ctx, DiscordUser user, [RemainingText] string reason = "")
         {
             var warning = new Warning

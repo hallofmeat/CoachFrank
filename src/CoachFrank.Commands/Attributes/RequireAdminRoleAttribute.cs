@@ -10,7 +10,7 @@ namespace CoachFrank.Commands.Attributes
     /// Allows admin
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public sealed class RequireAdminRoleAttribute : CheckBaseAttribute
+    public class RequireAdminRoleAttribute : CheckBaseAttribute
     {
         public override Task<bool> ExecuteCheckAsync(CommandContext ctx, bool help)
         {
