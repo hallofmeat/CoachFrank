@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoachFrank.Commands
 {
     [SlashCommandGroup("warn", "Manage Warnings", false)]
-    [SlashRequirePermissions(Permissions.KickMembers)]
+    [SlashRequirePermissions(Permissions.KickMembers, false)] //Dont allow this command in DM's
     public class WarnCommands : ApplicationCommandModule
     {
         private readonly BotContext _context;
