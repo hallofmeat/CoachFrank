@@ -2,18 +2,18 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoachFrank.Commands.Attributes;
 using CoachFrank.Data;
 using CoachFrank.Data.Models;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using DSharpPlus.SlashCommands.Attributes;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoachFrank.Commands
 {
     [SlashCommandGroup("warn", "Manage Warnings", false)]
-    [SlashRequirePermissions(Permissions.KickMembers, false)] //Dont allow this command in DM's
+    [RequirePermission(Permissions.KickMembers)]
     public class WarnCommands : ApplicationCommandModule
     {
         private readonly BotContext _context;

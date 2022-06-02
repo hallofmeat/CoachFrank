@@ -31,11 +31,16 @@ namespace CoachFrank
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-
             var commandAssembly = typeof(UtilCommands).GetTypeInfo().Assembly;
 
+            var guildId = _botSettings.Value?.GuildId;
+            if (guildId == null)
+            {
+                throw new Exception("BotSettings.GuildId is required");
+            }
+
             var slashCommands = _client.UseSlashCommands(_slashCommandsConfig);
-            slashCommands.RegisterCommands(commandAssembly, _botSettings.Value?.GuildId);
+            slashCommands.RegisterCommands(commandAssembly, guildId);
 
             slashCommands.SlashCommandExecuted += LogExecutedSlashCommand;
             slashCommands.SlashCommandErrored += LogErrorSlashCommand;
