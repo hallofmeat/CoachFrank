@@ -40,13 +40,12 @@ namespace CoachFrank
             slashCommands.SlashCommandExecuted += LogExecutedSlashCommand;
             slashCommands.SlashCommandErrored += LogErrorSlashCommand;
 
-            Logger.Info($"Registered {slashCommands.RegisteredCommands.Count} slash commands");
-
             Logger.Info("Connecting Discord client");
 
             await _client.ConnectAsync();
 
             Logger.Info("Connected Discord client");
+
         }
 
 
