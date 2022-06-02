@@ -1,36 +1,37 @@
 ﻿using System;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using CoachFrank.Commands.RestEase;
 using CoachFrank.Commands.Utils;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus;
+using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 using Humanizer;
 using RestEase;
 
 namespace CoachFrank.Commands
 {
-    public class UtilCommands : BaseCommandModule
+    public class UtilCommands : ApplicationCommandModule
     {
-        [Command("ping")]
-        public Task Ping(CommandContext ctx)
+        [SlashCommand("ping", "Alive?")]
+        public async Task Ping(InteractionContext ctx)
         {
-            return ctx.RespondAsync(EmojiConstants.PingPong);
+            await ctx.CreateResponseAsync(EmojiConstants.PingPong);
         }
 
-        [Command("uptime")]
-        public Task Uptime(CommandContext ctx)
+        [SlashCommand("uptime", "Get bot uptime")]
+        public Task Uptime(InteractionContext ctx)
         {
             var current = System.Diagnostics.Process.GetCurrentProcess();
             var upTime = DateTime.Now - current.StartTime;
-            return ctx.RespondAsync($"Bot Started: {current.StartTime}\nBot Uptime: {upTime.Humanize(2)}");
+            return ctx.CreateResponseAsync($"Bot Started: {current.StartTime}\nBot Uptime: {upTime.Humanize(2)}");
         }
 
-        [Command("status")]
-        public async Task Status(CommandContext ctx)
+        [SlashCommand("status", "Status of the Hall of Meat servers")]
+        public async Task Status(InteractionContext ctx)
         {
-            //TODO do async
+            await ctx.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource);
+
             var statusUpdateResult = new StringBuilder();
             var skateboard3Client = RestClient.For<IServerStatus>("http://skateboard3.hallofmeat.net");
             try
@@ -63,7 +64,7 @@ namespace CoachFrank.Commands
                 statusUpdateResult.AppendLine($"{EmojiConstants.RedCircle} Skateboard3Server QS2 is Down");
             }
 
-            await ctx.RespondAsync(statusUpdateResult.ToString());
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(statusUpdateResult.ToString()));
         }
     }
 }

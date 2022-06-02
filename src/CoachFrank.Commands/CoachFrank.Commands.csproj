@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.2.0" />
+    <PackageReference Include="DSharpPlus.SlashCommands" Version="4.2.0" />
     <PackageReference Include="Humanizer.Core" Version="2.11.10" />
     <PackageReference Include="RestEase" Version="1.5.5" />
   </ItemGroup>

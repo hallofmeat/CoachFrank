@@ -1,6 +1,6 @@
 ﻿using System;
 using DSharpPlus;
-using DSharpPlus.CommandsNext;
+using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -40,27 +40,13 @@ namespace CoachFrank
             return builder;
         }
 
-        public static IHostBuilder ConfigureDiscordCommands(this IHostBuilder builder, Action<CommandsNextConfiguration> configureOptions)
+        public static IHostBuilder ConfigureDiscordSlashCommands(this IHostBuilder builder)
         {
-            var commandsConfig = new CommandsNextConfiguration();
-            configureOptions(commandsConfig);
+            var slashCommandsConfig = new SlashCommandsConfiguration();
 
             builder.ConfigureServices(services =>
             {
-                services.AddSingleton(commandsConfig);
-            });
-
-            return builder;
-        }
-
-        public static IHostBuilder ConfigureDiscordCommands(this IHostBuilder builder, Action<HostBuilderContext, CommandsNextConfiguration> configureOptions)
-        {
-            builder.ConfigureServices((ctx, services) =>
-            {
-                var commandsConfig = new CommandsNextConfiguration();
-                configureOptions(ctx, commandsConfig);
-
-                services.AddSingleton(commandsConfig);
+                services.AddSingleton(slashCommandsConfig);
             });
 
             return builder;

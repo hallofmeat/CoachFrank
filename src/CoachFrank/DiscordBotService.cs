@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using CoachFrank.Commands;
 using DSharpPlus;
-using DSharpPlus.CommandsNext;
+using DSharpPlus.SlashCommands;
+using DSharpPlus.SlashCommands.EventArgs;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using NLog;
 
 namespace CoachFrank
@@ -16,26 +18,29 @@ namespace CoachFrank
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly DiscordClient _client;
-        private readonly CommandsNextConfiguration _commandsConfig;
+        private readonly SlashCommandsConfiguration _slashCommandsConfig;
+        private readonly IOptionsSnapshot<BotSettings> _botSettings;
 
-        public DiscordBotService(DiscordClient client, CommandsNextConfiguration commandsConfig, IServiceProvider serviceProvider)
+        public DiscordBotService(DiscordClient client, SlashCommandsConfiguration slashCommandsConfig, IOptionsSnapshot<BotSettings> botSettings, IServiceProvider serviceProvider)
         {
             _client = client;
-            _commandsConfig = commandsConfig;
-            _commandsConfig.Services = serviceProvider; //Force IOC container
+            _slashCommandsConfig = slashCommandsConfig;
+            _botSettings = botSettings;
+            _slashCommandsConfig.Services = serviceProvider; //Force IOC container
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            var commandsNext = _client.UseCommandsNext(_commandsConfig);
 
             var commandAssembly = typeof(UtilCommands).GetTypeInfo().Assembly;
-            commandsNext.RegisterCommands(commandAssembly);
 
-            commandsNext.CommandExecuted += LogExecutedCommand;
-            commandsNext.CommandErrored += LogErrorCommand;
+            var slashCommands = _client.UseSlashCommands(_slashCommandsConfig);
+            slashCommands.RegisterCommands(commandAssembly, _botSettings.Value?.GuildId);
 
-            Logger.Info($"Registered {commandsNext.RegisteredCommands.Count} commands");
+            slashCommands.SlashCommandExecuted += LogExecutedSlashCommand;
+            slashCommands.SlashCommandErrored += LogErrorSlashCommand;
+
+            Logger.Info($"Registered {slashCommands.RegisteredCommands.Count} slash commands");
 
             Logger.Info("Connecting Discord client");
 
@@ -43,6 +48,8 @@ namespace CoachFrank
 
             Logger.Info("Connected Discord client");
         }
+
+
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
@@ -56,18 +63,18 @@ namespace CoachFrank
             Logger.Info("Stopped Discord Client");
         }
 
-        private Task LogErrorCommand(CommandsNextExtension context, CommandErrorEventArgs e)
+        private Task LogErrorSlashCommand(SlashCommandsExtension sender, SlashCommandErrorEventArgs e)
         {
             Logger.Error(e.Exception,
-                $"An exception was thrown while executing Command:'{e?.Command?.Name}' User:'{e?.Context?.User}'");
+                $"An exception was thrown while executing Command:'{e?.Context?.CommandName}' User:'{e?.Context?.User}'");
 
             return Task.CompletedTask;
         }
 
-        private Task LogExecutedCommand(CommandsNextExtension context, CommandExecutionEventArgs e)
+        private Task LogExecutedSlashCommand(SlashCommandsExtension sender, SlashCommandExecutedEventArgs e)
         {
             var guildName = e?.Context?.Guild?.Name ?? "Direct Message";
-            Logger.Info($"Executed Command:'{e?.Command?.Name}' User:'{e?.Context?.User}' in '{guildName}'");
+            Logger.Info($"Executed Command:'{e?.Context?.CommandName}' User:'{e?.Context?.User}' in '{guildName}'");
 
             return Task.CompletedTask;
         }

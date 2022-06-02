@@ -2,19 +2,19 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CoachFrank.Commands.Attributes;
 using CoachFrank.Data;
 using CoachFrank.Data.Models;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus;
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
+using DSharpPlus.SlashCommands.Attributes;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoachFrank.Commands
 {
-    [Group("warn")]
-    [RequireModeratorRole]
-    public class WarnCommands : BaseCommandModule
+    [SlashCommandGroup("warn", "Manage Warnings", false)]
+    [SlashRequirePermissions(Permissions.KickMembers)]
+    public class WarnCommands : ApplicationCommandModule
     {
         private readonly BotContext _context;
 
@@ -23,8 +23,8 @@ namespace CoachFrank.Commands
             _context = context;
         }
 
-        [GroupCommand]
-        public async Task Warn(CommandContext ctx, DiscordUser user, [RemainingText] string reason = "")
+        [SlashCommand("add", "Add Warning")]
+        public async Task WarnAdd(InteractionContext ctx, [Option("user", "User to warn")]  DiscordUser user, [Option("reason", "Warn reason")]  string reason = "")
         {
             var warning = new Warning
             {
@@ -38,30 +38,28 @@ namespace CoachFrank.Commands
 
             var count = _context.Warnings.Count(x => x.DiscordId == user.Id && !x.Removed);
 
-            await ctx.RespondAsync($"Warning saved, user has {count} warnings!");
+            await ctx.CreateResponseAsync($"Warning saved, user has {count} warnings!");
         }
 
-        [Command("remove")]
-        [RequireAdminRole]
-        public async Task WarnRemove(CommandContext ctx, int warnId)
+        [SlashCommand("remove", "Remove Warning")]
+        public async Task WarnRemove(InteractionContext ctx, [Option("warningId", "Warning Id to remove")]  double warnId)
         {
             var warning = _context.Warnings.SingleOrDefault(x => x.Id == warnId);
             if (warning != null)
             {
                 warning.Removed = true;
                 await _context.SaveChangesAsync();
-                await ctx.RespondAsync($"Warning {warnId} removed");
+                await ctx.CreateResponseAsync($"Warning {warnId} removed");
             }
         }
 
-        [Command("list")]
-        [RequireModeratorRole]
-        public async Task WarnList(CommandContext ctx, DiscordUser user)
+        [SlashCommand("list", "List Warnings")]
+        public async Task WarnList(InteractionContext ctx, [Option("user", "User to list warnings for")] DiscordUser user)
         {
             var warnings = await _context.Warnings.Where(x => x.DiscordId == user.Id && !x.Removed).ToListAsync();
             if(!warnings.Any())
             {
-                await ctx.RespondAsync("User has no warnings");
+                await ctx.CreateResponseAsync("User has no warnings");
                 return;
             }
             var builder = new StringBuilder();
@@ -69,9 +67,9 @@ namespace CoachFrank.Commands
             foreach (var warn in warnings)
             {
                 var issuer = await ctx.Client.GetUserAsync(warn.IssuerId);
-                builder.Append($"{warn.Id}\t{issuer.Username}\t{warn.Timestamp.ToShortDateString()}\t{warn.Reason}");
+                builder.Append($"{warn.Id}\t{issuer.Username}\t{warn.Timestamp.ToShortDateString()}\t{warn.Reason}\n");
             }
-            await ctx.RespondAsync(builder.ToString());
+            await ctx.CreateResponseAsync(builder.ToString());
         }
     }
 }

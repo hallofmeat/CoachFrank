@@ -57,10 +57,7 @@ namespace CoachFrank
                     options.Intents = DiscordIntents.AllUnprivileged;
                     options.AutoReconnect = true;
                 })
-                .ConfigureDiscordCommands(options =>
-                {
-                    options.StringPrefixes = new List<string> {"!"};
-                })
+                .ConfigureDiscordSlashCommands()
                 .ConfigureServices((context, services) =>
                 {
                     services.Configure<BotSettings>(context.Configuration.GetSection("BotSettings"));
