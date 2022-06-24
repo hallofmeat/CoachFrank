@@ -1,8 +1,7 @@
-﻿namespace CoachFrank
+﻿namespace CoachFrank;
+
+public class BotSettings
 {
-    public class BotSettings
-    {
-        public string DiscordToken { get; set; }
-        public ulong? GuildId { get; set; }
-    }
+    public string DiscordToken { get; set; }
+    public ulong? GuildId { get; set; }
 }

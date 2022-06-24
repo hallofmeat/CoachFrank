@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using CoachFrank.Commands.Attributes;
 using CoachFrank.Commands.RestEase;
 using CoachFrank.Commands.Utils;
 using DSharpPlus;
@@ -13,6 +14,14 @@ namespace CoachFrank.Commands
 {
     public class UtilCommands : ApplicationCommandModule
     {
+        [SlashCommand("exit", "Kill the bot, should restart")]
+        [RequirePermission(Permissions.Administrator)]
+        public async Task Exit(InteractionContext ctx)
+        {
+            await ctx.CreateResponseAsync("brb");
+            Environment.Exit(1);
+        }
+
         [SlashCommand("ping", "Alive?")]
         public async Task Ping(InteractionContext ctx)
         {

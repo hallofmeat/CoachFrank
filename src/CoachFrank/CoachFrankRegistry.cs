@@ -1,16 +1,15 @@
 ﻿using Autofac;
 using CoachFrank.Data;
 
-namespace CoachFrank
+namespace CoachFrank;
+
+public class CoachFrankRegistry : Module
 {
-    public class CoachFrankRegistry : Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            //EfCore
-            builder
-                .RegisterType<BotContext>()
-                .InstancePerLifetimeScope();
-        }
+        //EfCore
+        builder
+            .RegisterType<BotContext>()
+            .InstancePerLifetimeScope();
     }
 }
