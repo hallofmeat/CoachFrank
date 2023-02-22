@@ -39,10 +39,13 @@ namespace CoachFrank.Commands
         [SlashCommand("status", "Status of the Hall of Meat servers")]
         public async Task Status(InteractionContext ctx)
         {
+            await ctx.CreateResponseAsync("Under Development");
+            return;
+
             await ctx.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource);
 
             var statusUpdateResult = new StringBuilder();
-            var skateboard3Client = RestClient.For<IServerStatus>("http://skateboard3.hallofmeat.net");
+            var skateboard3Client = RestClient.For<IServerStatus>("http://sb3.hallofmeat.net");
             try
             {
                 var statusUpdate = await skateboard3Client.GetStatus();
