@@ -5,6 +5,10 @@ on:
     branches:
       - 'master'
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -12,16 +16,21 @@ jobs:
       contents: read
       packages: write
     steps:
-      -
-        name: Login to Registry
-        uses: docker/login-action@v1 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
         with:
-          registry: ghcr.io
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Login to Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      -
-        name: Build and push
-        uses: docker/build-push-action@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
