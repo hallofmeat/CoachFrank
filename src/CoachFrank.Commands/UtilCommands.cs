@@ -8,6 +8,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Humanizer;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestEase;
 
 namespace CoachFrank.Commands
@@ -18,7 +19,7 @@ namespace CoachFrank.Commands
         [RequirePermission(Permissions.Administrator)]
         public async Task Exit(InteractionContext ctx)
         {
-            await ctx.CreateResponseAsync("brb");
+            await ctx.CreateResponseAsync("Restarting!");
             Environment.Exit(1);
         }
 
@@ -33,7 +34,16 @@ namespace CoachFrank.Commands
         {
             var current = System.Diagnostics.Process.GetCurrentProcess();
             var upTime = DateTime.Now - current.StartTime;
-            return ctx.CreateResponseAsync($"Bot Started: {current.StartTime}\nBot Uptime: {upTime.Humanize(2)}");
+
+            var builder = new DiscordEmbedBuilder
+            {
+                Title = "Bot Uptime",
+                Color = new Optional<DiscordColor>(DiscordColor.Green),
+            };
+            builder.AddField("Uptime", upTime.Humanize(2));
+            builder.AddField("Started", $"{current.StartTime}");
+
+            return ctx.CreateResponseAsync(builder);
         }
 
         [SlashCommand("status", "Status of the Hall of Meat servers")]
@@ -42,6 +52,7 @@ namespace CoachFrank.Commands
             await ctx.CreateResponseAsync("Under Development");
             return;
 
+            //TODO use DiscordEmbedBuilder
             await ctx.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource);
 
             var statusUpdateResult = new StringBuilder();
