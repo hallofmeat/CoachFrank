@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DSharpPlus.SlashCommands" Version="4.4.2" />
-    <PackageReference Include="Humanizer.Core" Version="2.11.10" />
-    <PackageReference Include="NLog" Version="5.2.2" />
+    <PackageReference Include="DSharpPlus.SlashCommands" Version="4.4.5" />
+    <PackageReference Include="DSharpPlus" Version="4.4.5" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+    <PackageReference Include="NLog" Version="5.2.7" />
     <PackageReference Include="RestEase" Version="1.6.4" />
     <PackageReference Include="RestEase.SourceGenerator" Version="1.6.4">
       <PrivateAssets>all</PrivateAssets>
